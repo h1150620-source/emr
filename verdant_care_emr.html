@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Verdant Care｜多國語言電子病歷</title>
+<style>
+:root{
+  --deep:#0c4338;--deep2:#14594a;--green:#2f8069;--mint:#b9dfd0;
+  --pale:#edf7f2;--cream:#fbfdfb;--line:#dcebe5;--text:#183b34;
+  --muted:#70857f;--danger:#b74d55;--gold:#b9944e;--shadow:0 18px 55px rgba(17,72,58,.11);
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter,"Noto Sans TC","Noto Sans JP","Noto Sans KR",Arial,sans-serif;color:var(--text);
+background:radial-gradient(circle at 75% 10%,#e5f3ed 0,transparent 25%),linear-gradient(135deg,#f6faf8,#eef7f3);min-height:100vh}
+button,input,textarea,select{font:inherit}
+button{cursor:pointer}
+.top-ribbon{height:7px;background:linear-gradient(90deg,var(--deep),#7abda7,var(--gold),#7abda7,var(--deep))}
+.app{display:grid;grid-template-columns:285px 1fr;min-height:calc(100vh - 7px)}
+.sidebar{background:linear-gradient(180deg,#0b4439,#0a382f);color:#fff;padding:22px 18px;position:sticky;top:0;height:100vh;overflow:auto}
+.logo{display:flex;gap:12px;align-items:center;margin-bottom:24px}
+.logo-mark{width:48px;height:48px;border:1px solid rgba(255,255,255,.22);border-radius:16px;display:grid;place-items:center;font-size:24px;background:rgba(255,255,255,.08)}
+.logo b{display:block;font-family:Georgia,serif;font-size:19px;letter-spacing:1.4px}
+.logo small{opacity:.62;font-size:10px}
+.patient{padding:17px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.07);border-radius:22px;margin-bottom:18px}
+.avatar{width:64px;height:64px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(145deg,#d8eee6,#6aa992);color:#0a4439;font-weight:900;font-size:24px;margin-bottom:12px}
+.patient h2{font-size:20px;margin:0 0 4px}.patient p{font-size:11px;opacity:.65;margin:4px 0}
+.patient-meta{display:grid;gap:8px;margin-top:13px;font-size:12px;color:#d8ebe5}
+.edit-patient{width:100%;border:1px solid rgba(255,255,255,.25);background:transparent;color:white;padding:9px;border-radius:12px;margin-top:14px}
+.nav-title{font-size:10px;letter-spacing:1.5px;opacity:.45;padding:12px 10px 7px}
+.nav button{width:100%;border:0;background:transparent;color:#d7e9e3;text-align:left;padding:11px 12px;border-radius:12px;margin:2px 0;display:flex;gap:10px;align-items:center;font-size:13px}
+.nav button:hover,.nav button.active{background:rgba(255,255,255,.12);color:white}
+.nav button.active{box-shadow:inset 3px 0 #a7d9c8}
+.sidebar-bottom{margin-top:20px;padding-top:16px;border-top:1px solid rgba(255,255,255,.1)}
+.main{min-width:0;padding:18px 24px 34px}
+.header{height:67px;background:rgba(255,255,255,.82);backdrop-filter:blur(18px);border:1px solid white;border-radius:20px;display:flex;align-items:center;justify-content:space-between;padding:0 18px;box-shadow:var(--shadow);position:sticky;top:12px;z-index:10}
+.languages{display:flex;gap:4px;background:#f1f7f4;border:1px solid var(--line);padding:4px;border-radius:13px}
+.lang{border:0;background:transparent;padding:8px 11px;border-radius:9px;color:var(--muted);font-size:12px}
+.lang.active{background:#fff;color:var(--deep);box-shadow:0 3px 10px #d8e7e1;font-weight:800}
+.header-right{display:flex;align-items:center;gap:10px}.icon-btn{border:1px solid var(--line);background:white;border-radius:11px;width:39px;height:39px;color:var(--deep)}
+.doctor{display:flex;align-items:center;gap:9px;padding-left:6px}.doctor-avatar{width:36px;height:36px;border-radius:50%;background:#d8eee6;display:grid;place-items:center;font-size:15px}.doctor b{font-size:12px;display:block}.doctor span{font-size:10px;color:var(--muted)}
+.hero{margin-top:20px;background:rgba(255,255,255,.88);border:1px solid white;border-radius:30px;box-shadow:var(--shadow);min-height:145px;padding:28px 34px;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:space-between}
+.hero:before{content:"";position:absolute;width:350px;height:350px;border:1px solid #d8ebe4;border-radius:50%;right:-80px;top:-185px}
+.hero:after{content:"";position:absolute;width:190px;height:34px;background:linear-gradient(90deg,#8dc9b5,#e8f3ed,#8dc9b5);right:-35px;top:18px;transform:rotate(22deg);border-radius:50%;opacity:.75}
+.hero h1{font:700 37px Georgia,serif;margin:0;color:var(--deep)}.hero .en{color:#79a196;font-size:13px;margin-top:4px}
+.hero-meta{display:flex;gap:30px;position:relative;z-index:2}.meta b{display:block;font-size:12px}.meta span{font-size:11px;color:var(--muted)}
+.workspace{display:grid;grid-template-columns:minmax(0,1fr) 285px;gap:18px;margin-top:18px}
+.panel{background:rgba(255,255,255,.9);border:1px solid white;border-radius:24px;box-shadow:var(--shadow);padding:20px}
+.tabs{display:flex;gap:7px;overflow:auto;padding-bottom:5px;margin-bottom:15px}.tab{white-space:nowrap;border:1px solid var(--line);background:#f7fbf9;color:var(--muted);padding:9px 14px;border-radius:100px;font-size:12px}.tab.active{background:var(--deep);color:white;border-color:var(--deep)}
+.section-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}.section-head h3{margin:0;font-size:17px}.section-head p{margin:4px 0 0;color:var(--muted);font-size:11px}.add{border:0;background:var(--deep);color:white;padding:9px 13px;border-radius:10px;font-size:12px}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.card{border:1px solid var(--line);border-radius:17px;padding:16px;background:linear-gradient(145deg,#fff,#f7fbf9);min-height:150px}.card h4{margin:0 0 11px;font-size:13px}.card p{font-size:12px;color:#5e746d;line-height:1.7;margin:0}.tags{display:flex;gap:6px;flex-wrap:wrap}.tag{background:#e9f4ef;color:var(--deep2);padding:6px 8px;border-radius:8px;font-size:11px}.tag.red{background:#fdecee;color:var(--danger)}
+.timeline{margin-top:14px}.event{display:grid;grid-template-columns:86px 18px 1fr;gap:8px;min-height:62px}.event .date{font-size:10px;color:var(--muted);padding-top:3px}.dot{width:10px;height:10px;border:2px solid var(--green);border-radius:50%;margin-top:3px;position:relative}.dot:after{content:"";position:absolute;width:1px;height:57px;background:#cfe3dc;left:2px;top:8px}.event:last-child .dot:after{display:none}.event b{font-size:12px}.event span{display:block;font-size:11px;color:var(--muted);margin-top:4px}
+.vitals{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}.vital{border:1px solid var(--line);border-radius:13px;padding:12px;text-align:center}.vital small{display:block;color:var(--muted);font-size:9px}.vital strong{display:block;font:700 21px Georgia,serif;margin:5px 0 2px;color:var(--deep)}.vital em{font-style:normal;font-size:9px;color:var(--muted)}
+.sidepanel{display:grid;gap:15px;align-content:start}.side-card{background:rgba(255,255,255,.9);border:1px solid white;border-radius:20px;box-shadow:var(--shadow);padding:17px}.side-card h3{font-size:14px;margin:0 0 13px}.alert{border:1px solid #f1d4d6;background:#fff6f6;border-radius:13px;padding:11px;margin-bottom:9px}.alert b{font-size:11px;color:var(--danger)}.alert span{display:block;font-size:10px;color:#806d6d;margin-top:4px}.lab{display:flex;justify-content:space-between;border-bottom:1px solid #edf2ef;padding:9px 0;font-size:11px}.lab:last-child{border:0}.high{color:var(--danger);font-weight:800}.quick{display:grid;grid-template-columns:1fr 1fr;gap:8px}.quick button{border:1px solid var(--line);background:#f1f8f5;color:var(--deep);padding:10px;border-radius:11px;font-size:10px}
+.footer{text-align:center;color:#78918a;font-size:10px;padding:22px}
+.modal-backdrop{position:fixed;inset:0;background:rgba(5,35,29,.42);backdrop-filter:blur(5px);display:none;align-items:center;justify-content:center;z-index:50}.modal-backdrop.show{display:flex}.modal{width:min(680px,calc(100% - 30px));background:#fff;border-radius:24px;box-shadow:0 30px 100px rgba(0,0,0,.25);padding:23px}.modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px}.modal-head h2{margin:0;font-size:20px}.close{border:0;background:#eef6f2;border-radius:10px;width:35px;height:35px}.form{display:grid;grid-template-columns:1fr 1fr;gap:12px}.field{display:grid;gap:6px}.field.full{grid-column:1/-1}.field label{font-size:11px;color:var(--muted);font-weight:700}.field input,.field select,.field textarea{border:1px solid var(--line);border-radius:11px;padding:10px;outline:none;background:#fbfdfc}.field textarea{min-height:90px;resize:vertical}.modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:17px}.cancel{border:1px solid var(--line);background:white;padding:10px 15px;border-radius:10px}.save{border:0;background:var(--deep);color:white;padding:10px 16px;border-radius:10px}
+.toast{position:fixed;right:25px;bottom:25px;background:var(--deep);color:#fff;padding:12px 17px;border-radius:12px;box-shadow:var(--shadow);font-size:12px;opacity:0;transform:translateY(10px);transition:.25s;z-index:80}.toast.show{opacity:1;transform:none}
+@media(max-width:1100px){.app{grid-template-columns:220px 1fr}.workspace{grid-template-columns:1fr}.sidepanel{grid-template-columns:repeat(3,1fr)}.cards{grid-template-columns:1fr 1fr}.hero-meta{gap:15px}}
+@media(max-width:760px){.app{display:block}.sidebar{height:auto;position:relative}.nav{display:grid;grid-template-columns:1fr 1fr}.main{padding:10px}.header{position:relative;flex-wrap:wrap;height:auto;padding:10px}.languages{order:3;width:100%;justify-content:center}.hero{padding:22px;display:block}.hero h1{font-size:30px}.hero-meta{margin-top:20px;flex-wrap:wrap}.cards,.sidepanel{grid-template-columns:1fr}.form{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="top-ribbon"></div>
+<div class="app">
+<aside class="sidebar">
+  <div class="logo"><div class="logo-mark">✚</div><div><b>VERDANT CARE</b><small>International EMR System</small></div></div>
+  <div class="patient">
+    <div class="avatar">王</div><h2 id="patientName">王小明 ♂</h2><p>MRN 2024-05231</p>
+    <div class="patient-meta"><span>◫　1990/05/15（34歲）</span><span>◉　O+</span><span>⌕　0912-345-678</span></div>
+    <button class="edit-patient" onclick="openModal('patient')">編輯基本資料</button>
+  </div>
+  <div class="nav-title" data-i18n="records">病歷紀錄</div>
+  <nav class="nav" id="nav">
+    <button class="active" data-tab="overview">⌂　<span data-i18n="overview">病歷總覽</span></button>
+    <button data-tab="basic">▣　<span data-i18n="basic">基本資料</span></button>
+    <button data-tab="present">♧　<span data-i18n="present">現病史</span></button>
+    <button data-tab="past">◈　<span data-i18n="past">過去病史</span></button>
+    <button data-tab="disease">＋　<span data-i18n="disease">疾病史</span></button>
+    <button data-tab="family">♧　<span data-i18n="family">家族史</span></button>
+    <button data-tab="surgery">⚕　<span data-i18n="surgery">手術史</span></button>
+    <button data-tab="medication">▣　<span data-i18n="medication">用藥史</span></button>
+    <button data-tab="allergy">!　<span data-i18n="allergy">過敏史</span></button>
+    <button data-tab="social">♙　<span data-i18n="social">社會／生活史</span></button>
+    <button data-tab="hospital">▤　<span data-i18n="hospital">住院史</span></button>
+    <button data-tab="labs">⌬　<span data-i18n="labs">檢驗／檢查結果</span></button>
+    <button data-tab="vaccine">◇　<span data-i18n="vaccine">疫苗史</span></button>
+  </nav>
+  <div class="sidebar-bottom"><button class="edit-patient" onclick="exportRecord()">⇩　匯出病歷摘要</button></div>
+</aside>
+
+<main class="main">
+<header class="header">
+  <div class="languages">
+    <button class="lang active" data-lang="zh">🇹🇼 中文</button>
+    <button class="lang" data-lang="en">🇺🇸 English</button>
+    <button class="lang" data-lang="ja">🇯🇵 日本語</button>
+    <button class="lang" data-lang="ko">🇰🇷 한국어</button>
+    <button class="lang" data-lang="vi">🇻🇳 Tiếng Việt</button>
+  </div>
+  <div class="header-right"><button class="icon-btn" onclick="showToast('目前有 3 則重要通知')">♧</button><div class="doctor"><div class="doctor-avatar">林</div><div><b>Dr. 林佩儀</b><span>主治醫師</span></div></div></div>
+</header>
+
+<section class="hero">
+  <div><h1 data-i18n="overviewTitle">病歷總覽</h1><div class="en">Patient Overview</div></div>
+  <div class="hero-meta"><div class="meta"><b>▣　最後就診</b><span>2024/05/10</span></div><div class="meta"><b>♙　主治醫師</b><span>林佩儀 醫師</span></div><div class="meta"><b>▣　病歷建立</b><span>2023/02/18</span></div><div class="meta"><b>◷　更新時間</b><span>2024/05/12 14:30</span></div></div>
+</section>
+
+<div class="workspace">
+<section class="panel">
+  <div class="tabs" id="tabs">
+    <button class="tab active" data-tab="overview">❖　重點摘要</button>
+    <button class="tab" data-tab="present">♢　病史總結</button>
+    <button class="tab" data-tab="medication">♧　用藥與過敏</button>
+    <button class="tab" data-tab="labs">⌬　檢驗異常</button>
+    <button class="tab" data-tab="alerts">!　重要提醒</button>
+  </div>
+  <div id="content">
+    <div class="section-head"><div><h3 data-i18n="keySummary">重點摘要</h3><p>Patient Summary</p></div><button class="add" onclick="openModal()">＋ <span data-i18n="addRecord">新增病歷</span></button></div>
+    <div class="cards">
+      <article class="card"><h4 data-i18n="present">現病史</h4><p>患者主訴間歇性頭暈、疲倦，持續約 2 週，無胸痛或呼吸困難。</p><button class="add" style="margin-top:13px;background:#edf7f2;color:#155847" onclick="selectTab('present')">查看詳情 →</button></article>
+      <article class="card"><h4 data-i18n="disease">疾病史</h4><div class="tags"><span class="tag">高血壓（2018）</span><span class="tag">第二型糖尿病（2020）</span><span class="tag">高血脂（2021）</span></div></article>
+      <article class="card"><h4 data-i18n="medication">用藥與過敏</h4><p>目前用藥（2）</p><div class="tags"><span class="tag">Metformin 500mg</span><span class="tag">Amlodipine 5mg</span><span class="tag red">Penicillin 過敏</span></div></article>
+    </div>
+    <div class="cards" style="margin-top:12px">
+      <article class="card"><h4>時間軸</h4><div class="timeline">
+        <div class="event"><div class="date">2024/05/10</div><div class="dot"></div><div><b>門診就醫</b><span>一般內科 / 林佩儀 醫師</span></div></div>
+        <div class="event"><div class="date">2024/03/22</div><div class="dot"></div><div><b>檢驗檢查</b><span>糖化血色素 HbA1c 7.2%</span></div></div>
+        <div class="event"><div class="date">2023/12/05</div><div class="dot"></div><div><b>門診就醫</b><span>高血壓回診</span></div></div>
+        <div class="event"><div class="date">2023/08/14</div><div class="dot"></div><div><b>手術史</b><span>闌尾切除手術</span></div></div>
+      </div></article>
+      <article class="card"><h4>生命徵象 <small style="color:#79958d">（最近一次）</small></h4><div class="vitals">
+        <div class="vital"><small>血壓</small><strong>120/80</strong><em>mmHg</em></div>
+        <div class="vital"><small>心跳</small><strong>72</strong><em>bpm</em></div>
+        <div class="vital"><small>體溫</small><strong>36.5</strong><em>°C</em></div>
+        <div class="vital"><small>呼吸</small><strong>16</strong><em>/min</em></div>
+        <div class="vital"><small>血氧</small><strong>98</strong><em>%</em></div>
+        <div class="vital"><small>體重</small><strong>68</strong><em>kg</em></div>
+      </div></article>
+    </div>
+  </div>
+</section>
+
+<aside class="sidepanel">
+  <div class="side-card"><h3>⚠　重要提醒</h3><div class="alert"><b>藥物過敏</b><span>Penicillin（青黴素）</span></div><div class="alert" style="background:#fffaf0;border-color:#f0e0bd"><b style="color:#a27a2e">高風險疾病</b><span>高血壓、糖尿病</span></div><div class="alert" style="background:#f2f8f5;border-color:#dcece5"><b style="color:#2b745f">注意事項</b><span>定期追蹤血糖與血壓控制</span></div></div>
+  <div class="side-card"><h3>⌬　近期檢驗異常</h3><div class="lab"><span>HbA1c</span><span class="high">7.2% ↑</span></div><div class="lab"><span>LDL-C</span><span class="high">142 mg/dL ↑</span></div><div class="lab"><span>Triglyceride</span><span class="high">215 mg/dL ↑</span></div><button class="add" style="width:100%;margin-top:10px;background:#edf7f2;color:#155847" onclick="selectTab('labs')">查看所有檢驗結果 →</button></div>
+  <div class="side-card"><h3>快速操作</h3><div class="quick"><button onclick="openModal()">▣ 新增病歷記錄</button><button onclick="showToast('處方模組已開啟')">▤ 開立處方</button><button onclick="selectTab('labs')">⌬ 檢驗檢查單</button><button onclick="exportRecord()">⇩ 病歷匯出</button></div></div>
+</aside>
+</div>
+<div class="footer">© 2026 Verdant Care Hospital · International Multilingual EMR</div>
+</main>
+</div>
+
+<div class="modal-backdrop" id="modal">
+  <div class="modal">
+    <div class="modal-head"><h2 id="modalTitle">新增病歷記錄</h2><button class="close" onclick="closeModal()">×</button></div>
+    <form id="recordForm">
+      <div class="form">
+        <div class="field"><label>紀錄類型</label><select id="recordType"><option>現病史</option><option>過去病史</option><option>疾病史</option><option>家族史</option><option>手術史</option><option>用藥史</option><option>過敏史</option><option>社會／生活史</option><option>住院史</option><option>檢驗／檢查結果</option><option>疫苗史</option></select></div>
+        <div class="field"><label>日期</label><input id="recordDate" type="date"></div>
+        <div class="field full"><label>標題</label><input id="recordTitle" placeholder="例如：高血壓追蹤"></div>
+        <div class="field full"><label>內容</label><textarea id="recordNote" placeholder="輸入病歷內容、醫療備註或檢查結果"></textarea></div>
+      </div>
+      <div class="modal-actions"><button type="button" class="cancel" onclick="closeModal()">取消</button><button class="save">儲存紀錄</button></div>
+    </form>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+const T={
+zh:{records:"病歷紀錄",overview:"病歷總覽",basic:"基本資料",present:"現病史",past:"過去病史",disease:"疾病史",family:"家族史",surgery:"手術史",medication:"用藥史",allergy:"過敏史",social:"社會／生活史",hospital:"住院史",labs:"檢驗／檢查結果",vaccine:"疫苗史",overviewTitle:"病歷總覽",keySummary:"重點摘要",addRecord:"新增病歷"},
+en:{records:"MEDICAL RECORDS",overview:"Overview",basic:"Basic Information",present:"Present Illness",past:"Past History",disease:"Disease History",family:"Family History",surgery:"Surgical History",medication:"Medication",allergy:"Allergies",social:"Social / Lifestyle",hospital:"Hospitalization",labs:"Laboratory / Imaging",vaccine:"Vaccination History",overviewTitle:"Patient Overview",keySummary:"Key Summary",addRecord:"Add Record"},
+ja:{records:"診療記録",overview:"カルテ概要",basic:"基本情報",present:"現病歴",past:"既往歴",disease:"疾患歴",family:"家族歴",surgery:"手術歴",medication:"服薬歴",allergy:"アレルギー",social:"社会・生活歴",hospital:"入院歴",labs:"検査・画像結果",vaccine:"予防接種歴",overviewTitle:"カルテ概要",keySummary:"重要情報",addRecord:"記録を追加"},
+ko:{records:"진료 기록",overview:"진료 기록 개요",basic:"기본 정보",present:"현병력",past:"과거력",disease:"질병력",family:"가족력",surgery:"수술력",medication:"복약력",allergy:"알레르기",social:"사회 / 생활력",hospital:"입원력",labs:"검사 결과",vaccine:"예방접종력",overviewTitle:"환자 기록 개요",keySummary:"주요 요약",addRecord:"기록 추가"},
+vi:{records:"HỒ SƠ Y TẾ",overview:"Tổng quan",basic:"Thông tin cơ bản",present:"Bệnh sử hiện tại",past:"Tiền sử bệnh",disease:"Tiền sử bệnh lý",family:"Tiền sử gia đình",surgery:"Tiền sử phẫu thuật",medication:"Thuốc đang dùng",allergy:"Dị ứng",social:"Xã hội / Lối sống",hospital:"Tiền sử nhập viện",labs:"Xét nghiệm / Chẩn đoán hình ảnh",vaccine:"Tiêm chủng",overviewTitle:"Tổng quan bệnh án",keySummary:"Tóm tắt chính",addRecord:"Thêm hồ sơ"}
+};
+let lang="zh", currentTab="overview";
+function setLang(l){
+ lang=l; document.documentElement.lang=l==="zh"?"zh-Hant":l;
+ document.querySelectorAll("[data-i18n]").forEach(el=>{let k=el.dataset.i18n;if(T[l][k])el.textContent=T[l][k]});
+ document.querySelectorAll(".lang").forEach(b=>b.classList.toggle("active",b.dataset.lang===l));
+}
+document.querySelectorAll(".lang").forEach(b=>b.onclick=()=>setLang(b.dataset.lang));
+function selectTab(tab){
+ currentTab=tab;
+ document.querySelectorAll("[data-tab]").forEach(b=>b.classList.toggle("active",b.dataset.tab===tab));
+ if(tab!=="overview"){
+   const title=T[lang][tab]||tab;
+   document.querySelector("#content").innerHTML=`<div class="section-head"><div><h3>${title}</h3><p>${title}</p></div><button class="add" onclick="openModal()">＋ ${T[lang].addRecord}</button></div>
+   <div class="cards"><article class="card"><h4>${title}</h4><p>此區域可新增、編輯與管理病人的${title}。按下右上角「新增病歷」即可建立新的紀錄。</p></article>
+   <article class="card"><h4>最近紀錄</h4><div class="tags"><span class="tag">2024/05/10</span><span class="tag">已確認</span></div><p style="margin-top:10px">目前系統已保留既有病歷資料，可繼續新增紀錄。</p></article>
+   <article class="card"><h4>備註</h4><p>此為前端示範資料。正式醫療系統使用時，應連接具備權限控管、稽核紀錄與加密機制的後端資料庫。</p></article></div>`;
+ } else location.reload();
+}
+document.querySelectorAll("#nav button,#tabs button").forEach(b=>b.onclick=()=>selectTab(b.dataset.tab));
+function openModal(type){document.getElementById("modal").classList.add("show");document.getElementById("recordDate").value=new Date().toISOString().slice(0,10)}
+function closeModal(){document.getElementById("modal").classList.remove("show")}
+document.getElementById("recordForm").onsubmit=e=>{e.preventDefault();closeModal();showToast("病歷紀錄已新增（示範）");e.target.reset()}
+function showToast(msg){let t=document.getElementById("toast");t.textContent=msg;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),2300)}
+function saveRecord(){showToast(lang==="en"?"Record saved successfully":"病歷已儲存")}
+function exportRecord(){showToast(lang==="en"?"Export prepared":"病歷摘要已準備匯出")}
+setLang("zh");
+</script>
+</body>
+</html>
